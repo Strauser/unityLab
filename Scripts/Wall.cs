@@ -18,10 +18,10 @@ public class Wall {
         }
     }
 
-    public static Direction NORTH = new Direction(0f, -1.5f, true);
-    public static Direction EAST = new Direction(-1.5f, 0f, false);
-    public static Direction SOUTH = new Direction(0f, 1.5f, true);
-    public static Direction WEST = new Direction(1.5f, 0f, false);
+    public static Direction NORTH = new Direction(0f, 1.5f, true);
+    public static Direction EAST = new Direction(1.5f, 0f, false);
+    public static Direction SOUTH = new Direction(0f, -1.5f, true);
+    public static Direction WEST = new Direction(-1.5f, 0f, false);
 
     private Tile tile;
     private Direction direction;

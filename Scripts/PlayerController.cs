@@ -6,19 +6,24 @@ public class PlayerController : MonoBehaviour {
 
     private Rigidbody rb;
 
-    private bool isMoving = false;
+    private static Vector3 noMovement = new Vector3(0, 0, 0);
 
+    private bool isMoving = false;
     private int framesLeftToMove = 0;
     private int pauseFrames = 0;
-    private static Vector3 noMovement = new Vector3(0, 0, 0);
     private Vector3 movement = noMovement;
 
     public int moveTimer;
     public int pauseTimer;
     private float speed;
 
+    private int posX;
+    private int posY;
+
     void Start()
     {
+        posX = 0;
+        posY = 0;
         speed = Laby.tileSize / moveTimer;
         rb = GetComponent<Rigidbody>();
     }
@@ -59,28 +64,38 @@ public class PlayerController : MonoBehaviour {
         bool left = Input.GetKey(KeyCode.LeftArrow);
         bool right = Input.GetKey(KeyCode.RightArrow);
 
-        if (right && !up && !down && !left)
-        {
-            futureMovement = new Vector3(-1, 0.0f, 0);
-            newMovement = true;
-        }
+        Tile currentTile = Laby.board[posX, posY];
 
-        else if (left && !up && !down && !right)
+        if (right && !up && !down && !left && currentTile.wallE == null)
         {
             futureMovement = new Vector3(1, 0.0f, 0);
             newMovement = true;
+            posX += 1;
+            Debug.Log(posX + " " + posY);
         }
 
-        else if (up && !down && !left && !right)
+        else if (left && !up && !down && !right && currentTile.wallW == null)
         {
-            futureMovement = new Vector3(0, 0.0f, -1);
+            futureMovement = new Vector3(-1, 0.0f, 0);
             newMovement = true;
+            posX -= 1;
+            Debug.Log(posX + " " + posY);
         }
 
-        else if (down && !up && !left && !right)
+        else if (up && !down && !left && !right && currentTile.wallN == null)
         {
             futureMovement = new Vector3(0, 0.0f, 1);
             newMovement = true;
+            posY += 1;
+            Debug.Log(posX + " " + posY);
+        }
+
+        else if (down && !up && !left && !right && currentTile.wallS == null)
+        {
+            futureMovement = new Vector3(0, 0.0f, -1);
+            newMovement = true;
+            posY -= 1;
+            Debug.Log(posX + " " + posY);
         }
 
         if (newMovement)

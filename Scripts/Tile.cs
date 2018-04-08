@@ -23,22 +23,22 @@ public class Tile {
 
         this.tileType = tileType;
 
-        if(y == 0 || Random.value < Laby.wallProba)
+        if(y == Laby.size-1 || Random.value < Laby.wallProba)
         { 
             wallN = new Wall(this, Wall.NORTH, wallType);
             walls.Add(wallN);
         }
-        if (x == 0 || Random.value < Laby.wallProba)
+        if (x == Laby.size - 1 || Random.value < Laby.wallProba)
         {
             wallE = new Wall(this, Wall.EAST, wallType);
             walls.Add(wallE);
         }
-        if (y == Laby.size-1)
+        if (y == 0)
         {
             wallS = new Wall(this, Wall.SOUTH, wallType);
             walls.Add(wallS);
         }
-        if (x == Laby.size-1)
+        if (x == 0)
         {
             wallW = new Wall(this, Wall.WEST, wallType);
             walls.Add(wallW);
