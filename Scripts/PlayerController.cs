@@ -9,52 +9,55 @@ public class PlayerController : MonoBehaviour {
     private static Vector3 noMovement = new Vector3(0, 0, 0);
 
     private bool isMoving = false;
+    private bool isTranslate = false;
     private int framesLeftToMove = 0;
     private int pauseFrames = 0;
     private Vector3 movement = noMovement;
 
     public int moveTimer;
     public int pauseTimer;
-    private float speed;
+    private float moveSpeed;
+    private float rotateSpeed;
 
     private int posX;
     private int posY;
 
-    void Start()
-    {
+    void Start() {
         posX = 0;
         posY = 0;
-        speed = Laby.tileSize / moveTimer;
+        moveSpeed = Laby.tileSize / moveTimer;
+        rotateSpeed = 1.0f / moveTimer;
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
-    {
-        if (!isMoving)
-        {
-            movement = prepareMovement();
+    void FixedUpdate() {
+        
+        Debug.Log("" + this.transform.eulerAngles);
+
+        if (!isMoving) {
+            movement = PrepareMovement();
         }
 
-        if (framesLeftToMove > 0)
-        {
+        if (framesLeftToMove > 0) {
             framesLeftToMove -= 1;
-            rb.transform.Translate(movement * speed);
+            if(isTranslate) {
+                rb.transform.Translate(movement * moveSpeed);
+            } else {
+                rb.transform.Rotate(movement * rotateSpeed);
+            }
         }
 
-        if (framesLeftToMove == 0 && pauseFrames >= 0)
-        {
+        if (framesLeftToMove == 0 && pauseFrames >= 0) {
             pauseFrames -= 1;
             movement = noMovement;
 
-            if(pauseFrames <= 0)
-            {
+            if(pauseFrames <= 0) {
                 isMoving = false;
             }
         }
     }
 
-    private Vector3 prepareMovement()
-    {
+    private Vector3 PrepareMovement() {
 
         bool newMovement = false;
         Vector3 futureMovement = noMovement;
@@ -64,42 +67,46 @@ public class PlayerController : MonoBehaviour {
         bool left = Input.GetKey(KeyCode.LeftArrow);
         bool right = Input.GetKey(KeyCode.RightArrow);
 
-        Tile currentTile = Laby.board[posX, posY];
+        float orientation = this.transform.rotation.eulerAngles.y % 360;
 
-        if (right && !up && !down && !left && currentTile.wallE == null)
-        {
-            futureMovement = new Vector3(1, 0.0f, 0);
+        if (right && !up && !down && !left) {
+            futureMovement = new Vector3(0, 90, 0);
             newMovement = true;
-            posX += 1;
-            Debug.Log(posX + " " + posY);
-        }
-
-        else if (left && !up && !down && !right && currentTile.wallW == null)
-        {
-            futureMovement = new Vector3(-1, 0.0f, 0);
+            isTranslate = false;
+        } else if (left && !up && !down && !right) {
+            futureMovement = new Vector3(0, -90, 0);
             newMovement = true;
-            posX -= 1;
-            Debug.Log(posX + " " + posY);
-        }
-
-        else if (up && !down && !left && !right && currentTile.wallN == null)
-        {
+            isTranslate = false;
+        } else if (up && !down && !left && !right && CanMoveInDirection(orientation)) {
             futureMovement = new Vector3(0, 0.0f, 1);
             newMovement = true;
-            posY += 1;
-            Debug.Log(posX + " " + posY);
-        }
+            isTranslate = true;
 
-        else if (down && !up && !left && !right && currentTile.wallS == null)
-        {
+            if (orientation > 359 || orientation < 1)
+                posY += 1;
+            else if (orientation > 89 && orientation < 91)
+                posX += 1;
+            else if (orientation > 269 && orientation < 271)
+                posX -= 1;
+            else if (orientation > 179 && orientation < 181)
+                posY -= 1;
+
+        } else if (down && !up && !left && !right && CanMoveInDirection((orientation + 180) % 360)) {
             futureMovement = new Vector3(0, 0.0f, -1);
             newMovement = true;
-            posY -= 1;
-            Debug.Log(posX + " " + posY);
+            isTranslate = true;
+
+            if (orientation > 359 || orientation < 1)
+                posY -= 1;
+            else if (orientation > 89 && orientation < 91)
+                posX -= 1;
+            else if (orientation > 269 && orientation < 271)
+                posX += 1;
+            else if (orientation > 179 && orientation < 181)
+                posY += 1;
         }
 
-        if (newMovement)
-        {
+        if (newMovement) {
             isMoving = true;
             framesLeftToMove = moveTimer;
             pauseFrames = pauseTimer;
@@ -107,5 +114,20 @@ public class PlayerController : MonoBehaviour {
 
         return futureMovement;
     }
-}
 
+    private bool CanMoveInDirection(float orientation) {
+        
+        Tile currentTile = Laby.board[posX, posY];
+
+        if ((orientation > 359  || orientation < 1) && currentTile.wallN == null)
+            return true;
+        else if (orientation > 89 && orientation < 91 && currentTile.wallE == null)
+            return true;
+        else if (orientation > 269 && orientation < 271 && currentTile.wallW == null)
+            return true;
+        else if (orientation > 179 && orientation < 181 && currentTile.wallS == null)
+            return true;
+
+        return false;
+    }
+}

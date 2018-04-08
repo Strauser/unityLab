@@ -23,7 +23,7 @@ public class Tile {
 
         this.tileType = tileType;
 
-        if(y == Laby.size-1 || Random.value < Laby.wallProba)
+        if (y == Laby.size-1 || Random.value < Laby.wallProba)
         { 
             wallN = new Wall(this, Wall.NORTH, wallType);
             walls.Add(wallN);
@@ -46,15 +46,13 @@ public class Tile {
 
     }
 
-    public void Instanciate()
-    {
-        Object.Instantiate(tileType, new Vector3(x*Laby.tileSize, 0, y* Laby.tileSize), Quaternion.identity);
+    public void Instanciate(Transform laby) {
+        GameObject newTile = Object.Instantiate(tileType, new Vector3(x*Laby.tileSize, 0, y* Laby.tileSize), Quaternion.identity);
+        newTile.transform.parent = laby;
 
-        foreach (Wall w in walls)
-        {
-            if (w != null)
-            {
-                w.Instanciate();
+        foreach (Wall w in walls) {
+            if (w != null) {
+                w.Instanciate(newTile.transform);
             }
         }
     }

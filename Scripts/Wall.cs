@@ -34,9 +34,11 @@ public class Wall {
         this.wallType = wallType;
     }
 
-    public void Instanciate()
+    public void Instanciate(Transform tileObject)
     {
         GameObject wallObject = Object.Instantiate(wallType, new Vector3(tile.GetX()*3 + direction.offsetX , 1.0f, tile.GetY()*3 + direction.offsetZ), Quaternion.identity);
+        wallObject.transform.parent = tileObject;
+
         if(direction.horizontal)
         {
             wallObject.transform.Rotate(new Vector3(0, 90, 0));

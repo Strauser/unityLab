@@ -20,7 +20,7 @@ public class Laby : MonoBehaviour {
             {
                 Tile tile = new Tile(x, y, tileType, wallType);
                 board[x, y] = tile;
-                tile.Instanciate();
+                tile.Instanciate(this.transform);
             }
         }
 
