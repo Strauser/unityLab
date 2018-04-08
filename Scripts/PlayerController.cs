@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour {
     private int posX;
     private int posY;
 
+    enum Orientation { NORTH, SOUTH, EAST, WEST};
+
     void Start() {
         posX = 0;
         posY = 0;
@@ -31,8 +33,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        
-        Debug.Log("" + this.transform.eulerAngles);
 
         if (!isMoving) {
             movement = PrepareMovement();
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour {
         bool left = Input.GetKey(KeyCode.LeftArrow);
         bool right = Input.GetKey(KeyCode.RightArrow);
 
-        float orientation = this.transform.rotation.eulerAngles.y % 360;
+        Orientation orientation = GetOrientation();
 
         if (right && !up && !down && !left) {
             futureMovement = new Vector3(0, 90, 0);
@@ -82,28 +82,24 @@ public class PlayerController : MonoBehaviour {
             newMovement = true;
             isTranslate = true;
 
-            if (orientation > 359 || orientation < 1)
-                posY += 1;
-            else if (orientation > 89 && orientation < 91)
-                posX += 1;
-            else if (orientation > 269 && orientation < 271)
-                posX -= 1;
-            else if (orientation > 179 && orientation < 181)
-                posY -= 1;
+            switch(orientation) {
+                case (Orientation.NORTH): posY += 1; break;
+                case (Orientation.EAST) : posX += 1; break;
+                case (Orientation.WEST) : posX -= 1; break;
+                case (Orientation.SOUTH): posY -= 1; break;
+            }
 
-        } else if (down && !up && !left && !right && CanMoveInDirection((orientation + 180) % 360)) {
+        } else if (down && !up && !left && !right && CanMoveInDirection(GetOrientation(180))) {
             futureMovement = new Vector3(0, 0.0f, -1);
             newMovement = true;
             isTranslate = true;
 
-            if (orientation > 359 || orientation < 1)
-                posY -= 1;
-            else if (orientation > 89 && orientation < 91)
-                posX -= 1;
-            else if (orientation > 269 && orientation < 271)
-                posX += 1;
-            else if (orientation > 179 && orientation < 181)
-                posY += 1;
+            switch (orientation) {
+                case (Orientation.NORTH): posY -= 1; break;
+                case (Orientation.EAST) : posX -= 1; break;
+                case (Orientation.WEST) : posX += 1; break;
+                case (Orientation.SOUTH): posY += 1; break;
+            }
         }
 
         if (newMovement) {
@@ -115,19 +111,33 @@ public class PlayerController : MonoBehaviour {
         return futureMovement;
     }
 
-    private bool CanMoveInDirection(float orientation) {
+    private bool CanMoveInDirection(Orientation orientation) {
         
         Tile currentTile = Laby.board[posX, posY];
 
-        if ((orientation > 359  || orientation < 1) && currentTile.wallN == null)
+        if (orientation == Orientation.NORTH && !currentTile.hasWall(Wall.NORTH))
             return true;
-        else if (orientation > 89 && orientation < 91 && currentTile.wallE == null)
+        else if (orientation == Orientation.EAST && !currentTile.hasWall(Wall.EAST))
             return true;
-        else if (orientation > 269 && orientation < 271 && currentTile.wallW == null)
+        else if (orientation == Orientation.WEST && !currentTile.hasWall(Wall.WEST))
             return true;
-        else if (orientation > 179 && orientation < 181 && currentTile.wallS == null)
+        else if (orientation == Orientation.SOUTH && !currentTile.hasWall(Wall.SOUTH))
             return true;
 
         return false;
+    }
+
+    private Orientation GetOrientation(int ajust = 0)
+    {
+        float orientation = (this.transform.rotation.eulerAngles.y + ajust) % 360;
+
+        if (orientation > 359 || orientation < 1)
+            return Orientation.NORTH;
+        else if (orientation > 89 && orientation < 91)
+            return Orientation.EAST;
+        else if (orientation > 269 && orientation < 271)
+            return Orientation.WEST;
+        else 
+            return Orientation.SOUTH;
     }
 }

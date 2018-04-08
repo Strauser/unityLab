@@ -23,8 +23,9 @@ public class Wall {
     public static Direction SOUTH = new Direction(0f, -1.5f, true);
     public static Direction WEST = new Direction(-1.5f, 0f, false);
 
+    public Direction direction;
+
     private Tile tile;
-    private Direction direction;
     private GameObject wallType;
 
     public Wall(Tile tile,  Direction direction, GameObject wallType)

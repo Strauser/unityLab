@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Laby : MonoBehaviour {
 
-    public static int size = 4;
+    public static int size = 10;
     public static float wallProba = 0.4f;
     public static float tileSize = 3.0f;
 
@@ -33,14 +33,12 @@ public class Laby : MonoBehaviour {
         {
             for (int y = 0; y < size; y++)
             {
-                if(x > 0 && board[x-1, y].wallE != null)
-                {
-                    board[x, y].wallW = new Wall(board[x, y], Wall.WEST, null);
+                if(x > 0 && board[x-1, y].hasWall(Wall.EAST)) {
+                    board[x, y].AddWall(Wall.WEST, null);
                 }
 
-                if (y > 0 && board[x, y-1].wallN != null)
-                {
-                    board[x, y].wallS = new Wall(board[x, y], Wall.SOUTH, null);
+                if (y > 0 && board[x, y-1].hasWall(Wall.NORTH)) {
+                    board[x, y].AddWall(Wall.SOUTH, null);
                 }
             }
         }

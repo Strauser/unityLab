@@ -8,11 +8,6 @@ public class Tile {
     private int y;
 
     private GameObject tileType;
-   
-    public Wall wallN;
-    public Wall wallE;
-    public Wall wallS;
-    public Wall wallW;
 
     List<Wall> walls = new List<Wall>();
 
@@ -22,28 +17,36 @@ public class Tile {
         this.y = y;
 
         this.tileType = tileType;
-
-        if (y == Laby.size-1 || Random.value < Laby.wallProba)
-        { 
-            wallN = new Wall(this, Wall.NORTH, wallType);
-            walls.Add(wallN);
+        
+        if (y == Laby.size-1) {
+            AddWall(Wall.NORTH, wallType);
         }
-        if (x == Laby.size - 1 || Random.value < Laby.wallProba)
-        {
-            wallE = new Wall(this, Wall.EAST, wallType);
-            walls.Add(wallE);
+        if (x == Laby.size - 1) {
+            AddWall(Wall.EAST, wallType);
         }
-        if (y == 0)
-        {
-            wallS = new Wall(this, Wall.SOUTH, wallType);
-            walls.Add(wallS);
+        if (y == 0) {
+            AddWall(Wall.SOUTH, wallType);
         }
-        if (x == 0)
-        {
-            wallW = new Wall(this, Wall.WEST, wallType);
-            walls.Add(wallW);
+        if (x == 0) {
+            AddWall(Wall.WEST, wallType);
         }
 
+        float rand = Random.value;
+
+        if(rand > .1 && rand < .9) {
+            if (Random.value > .5) AddWall(Wall.NORTH, wallType);
+            else AddWall(Wall.EAST, wallType);
+        } else if(rand > .9 && !hasWall(Wall.SOUTH) && !hasWall(Wall.WEST)) {
+            AddWall(Wall.NORTH, wallType);
+            AddWall(Wall.EAST, wallType);
+        }
+
+    }
+
+    public void AddWall(Wall.Direction direction, GameObject wallType) {
+        if(!hasWall(direction))
+            walls.Add(new Wall(this, direction
+                , wallType));
     }
 
     public void Instanciate(Transform laby) {
@@ -55,6 +58,14 @@ public class Tile {
                 w.Instanciate(newTile.transform);
             }
         }
+    }
+
+
+    public bool hasWall(Wall.Direction direction) {
+        foreach(Wall wall in walls) {
+            if (wall.direction.Equals(direction)) return true;
+        }
+        return false;
     }
 
     public int GetX()
