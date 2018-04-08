@@ -48,7 +48,7 @@ public class Tile {
 
     public void Instanciate()
     {
-        GameObject tile = Object.Instantiate(tileType, new Vector3(x*3, 0, y*3), Quaternion.identity);
+        Object.Instantiate(tileType, new Vector3(x*Laby.tileSize, 0, y* Laby.tileSize), Quaternion.identity);
 
         foreach (Wall w in walls)
         {

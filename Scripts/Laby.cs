@@ -10,6 +10,7 @@ public class Laby : MonoBehaviour {
 
     public static int size = 4;
     public static float wallProba = 0.4f;
+    public static float tileSize = 3.0f;
 
     void Start () {
         
