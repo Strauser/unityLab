@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Laby : MonoBehaviour {
 
-    public static int size = 10;
-    public static float wallProba = 0.4f;
-    public static float tileSize = 3.0f;
+    public static int size = 20;
 
     public static Tile[,] board = new Tile[size, size];
     public GameObject tileType;

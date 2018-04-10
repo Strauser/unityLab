@@ -50,7 +50,7 @@ public class Tile {
     }
 
     public void Instanciate(Transform laby) {
-        GameObject newTile = Object.Instantiate(tileType, new Vector3(x*Laby.tileSize, 0, y* Laby.tileSize), Quaternion.identity);
+        GameObject newTile = Object.Instantiate(tileType, new Vector3(x*Conf.tileSize, 0, y* Conf.tileSize), Quaternion.identity);
         newTile.transform.parent = laby;
 
         foreach (Wall w in walls) {
