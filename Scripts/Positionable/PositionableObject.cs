@@ -7,9 +7,20 @@ public class PositionableObject : MonoBehaviour {
     public int posX;
     public int posY;
 
-    public PositionableObject(int posX = 0, int posY = 0) {
+    public Rigidbody rb;
+
+    public void Start() {
+        this.posX = 0;
+        this.posY = 0;
+
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void SetPosition(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
     }
+
+
     
 }

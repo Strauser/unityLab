@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class MovableObject : PositionableObject {
 
-    public MovableObject(int posX = 0, int posY = 0) {
-        
+    public MovementManager mv;
+
+    public void StartWithParameter(MovementManager mv) {
+        this.mv = mv;
+        Start();
+    }
+
+    new private void Start() {
+        base.Start();
+    }
+
+    public void Move(MovementHelper.Direction direction) {
+        mv.Move(posX, posY, direction, rb);
     }
 
 }

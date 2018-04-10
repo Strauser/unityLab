@@ -23,6 +23,7 @@ public class Laby : MonoBehaviour {
         }
 
         updateTiles();
+
     }
 
     private void updateTiles()

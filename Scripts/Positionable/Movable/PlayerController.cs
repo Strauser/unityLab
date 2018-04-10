@@ -4,17 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MovableObject {
 
-    private Rigidbody rb;
-    private MovementManager movementManager;
-    
-    void Start() {
-        posX = 0;
-        posY = 0;
-        rb = GetComponent<Rigidbody>();
-
-        movementManager = new MovementManager(this);
+    new public void Start() {
+        base.StartWithParameter(new DefaultMovementManager(this));
     }
-
+    
     void FixedUpdate() {
 
         MovementHelper.Direction direction = MovementHelper.Direction.NONE;
@@ -28,7 +21,7 @@ public class PlayerController : MovableObject {
         else if(Input.GetKey(KeyCode.RightArrow))
             direction = MovementHelper.Direction.TURN_RIGHT;
 
-        movementManager.Move(posX, posY, direction, rb);
+        mv.Move(posX, posY, direction, rb);
 
     }
 
