@@ -16,7 +16,7 @@ public class PositionableObject : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
     }
 
-    void SetPosition(int posX, int posY) {
+    public void SetPosition(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
     }

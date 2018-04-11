@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MovableObject {
+public class Player: MovableObject {
 
     new public void Start() {
         base.StartWithParameter(new DefaultMovementManager(this));
@@ -24,9 +24,6 @@ public class PlayerController : MovableObject {
         mv.Move(posX, posY, direction, rb);
 
     }
-
-    public void UpdateMovement(MovementHelper.Orientation orientation) {
-
-    }
+    
 
 }
