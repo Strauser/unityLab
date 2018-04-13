@@ -15,8 +15,12 @@ public class MovableObject : PositionableObject {
         base.Start();
     }
 
-    public void Move(MovementHelper.Direction direction) {
-        mv.Move(posX, posY, direction, rb);
+    public void PrepareMovement(MovementHelper.Direction direction) {
+        mv.PrepareMovement(posX, posY, direction);
+    }
+
+    public void Move() {
+        mv.Move(posX, posY, rb);
     }
 
 }

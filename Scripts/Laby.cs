@@ -5,7 +5,7 @@ using UnityEngine;
 public class Laby : MonoBehaviour {
 
     public static int size = 20;
-
+    
     public static Tile[,] board = new Tile[size, size];
     public GameObject tileType;
     public GameObject wallType;

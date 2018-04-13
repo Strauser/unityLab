@@ -11,12 +11,14 @@ public abstract class MovementManager {
     public int framesLeftToMove = 0;
     public int pauseFrames = 0;
 
-    public Vector3 movement = MovementHelper.noMovement;
+    public Vector3 nextMove = MovementHelper.noMovement;
 
     public MovementManager(MovableObject entity) {
         this.entity = entity;
     }
-    
-    abstract public void Move(int posX, int posY, MovementHelper.Direction direction, Rigidbody rb);
+
+    abstract public void PrepareMovement(int posX, int posY, MovementHelper.Direction direction);
+
+    abstract public void Move(int posX, int posY, Rigidbody rb);
 
 }

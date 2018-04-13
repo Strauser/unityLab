@@ -6,31 +6,26 @@ public class DefaultMovementManager : MovementManager {
 
     public DefaultMovementManager(MovableObject entity) : base(entity) { }
 
-    override public void Move(int posX, int posY, MovementHelper.Direction direction, Rigidbody rb)
+    override public void Move(int posX, int posY, Rigidbody rb)
     {
-
-        if (!isMoving && direction != MovementHelper.Direction.NONE)
-        {
-            movement = PrepareMovement(posX, posY, direction);
-        }
-
+        
         if (framesLeftToMove > 0)
         {
             framesLeftToMove -= 1;
             if (isTranslate)
             {
-                rb.transform.Translate(movement * Conf.moveSpeed);
+                rb.transform.Translate(nextMove * Conf.moveSpeed);
             }
             else
             {
-                rb.transform.Rotate(movement * Conf.rotateSpeed);
+                rb.transform.Rotate(nextMove * Conf.rotateSpeed);
             }
         }
 
         if (framesLeftToMove == 0 && pauseFrames >= 0)
         {
             pauseFrames -= 1;
-            movement = MovementHelper.noMovement;
+            nextMove = MovementHelper.noMovement;
 
             if (pauseFrames <= 0)
             {
@@ -39,8 +34,12 @@ public class DefaultMovementManager : MovementManager {
         }
     }
 
-    public Vector3 PrepareMovement(int posX, int posY, MovementHelper.Direction direction)
+    override public void PrepareMovement(int posX, int posY, MovementHelper.Direction direction)
     {
+
+        if(isMoving) {
+            return;
+        }
 
         bool newMovement = false;
         Vector3 futureMovement = MovementHelper.noMovement;
@@ -100,6 +99,6 @@ public class DefaultMovementManager : MovementManager {
             pauseFrames = Conf.pauseTimer;
         }
 
-        return futureMovement;
+        nextMove = futureMovement;
     }
 }

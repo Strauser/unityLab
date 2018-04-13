@@ -15,7 +15,7 @@ public class Monster : MovableObject {
     }
 
     void FixedUpdate() {
-
+        
         MovementHelper.Direction direction = MovementHelper.Direction.NONE;
 
         float rand = Random.value;
@@ -31,7 +31,8 @@ public class Monster : MovableObject {
 
         Debug.Log(posX + " " + posY);
 
-        mv.Move(posX, posY, direction, rb);
+        mv.PrepareMovement(posX, posY, direction);
+        mv.Move(posX, posY, rb);
 
     }
     
