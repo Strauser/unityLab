@@ -10,6 +10,8 @@ public class Laby : MonoBehaviour {
     public GameObject tileType;
     public GameObject wallType;
 
+    private static List<PositionableObject> entitiesInTheMaze = new List<PositionableObject>();
+
     void Start () {
         
         for (int x = 0; x < size; x++)
@@ -41,6 +43,19 @@ public class Laby : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public static void AddToTheMaze(PositionableObject entity) {
+        entitiesInTheMaze.Add(entity);
+    }
+
+    public static bool IsTileOccupied(int x, int y) {
+        foreach(PositionableObject entity in Laby.entitiesInTheMaze) {
+            if(entity.isBlocking && entity.posX.Equals(x) && entity.posY.Equals(y)) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

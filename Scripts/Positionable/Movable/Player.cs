@@ -6,6 +6,7 @@ public class Player: MovableObject {
 
     new public void Start() {
         base.StartWithParameter(new DefaultMovementManager(this));
+        this.isBlocking = true;
     }
     
 }

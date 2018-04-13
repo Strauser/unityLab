@@ -33,10 +33,10 @@ public class Tile {
 
         float rand = Random.value;
 
-        if(rand > .1 && rand < .9) {
+        if(rand > .1 && rand < .95) {
             if (Random.value > .5) AddWall(Wall.NORTH, wallType);
             else AddWall(Wall.EAST, wallType);
-        } else if(rand > .9 && !hasWall(Wall.SOUTH) && !hasWall(Wall.WEST)) {
+        } else if(rand > .95 && !hasWall(Wall.SOUTH) && !hasWall(Wall.WEST)) {
             AddWall(Wall.NORTH, wallType);
             AddWall(Wall.EAST, wallType);
         }

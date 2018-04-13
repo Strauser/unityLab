@@ -25,3 +25,4 @@ public class CameraManager : MonoBehaviour {
         this.transform.eulerAngles = player.transform.eulerAngles;
     }
 }
+    

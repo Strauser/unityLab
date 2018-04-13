@@ -17,7 +17,7 @@ public abstract class MovementManager {
         this.entity = entity;
     }
 
-    abstract public void PrepareMovement(int posX, int posY, MovementHelper.Direction direction);
+    abstract public bool PrepareMovement(int posX, int posY, MovementHelper.Direction direction);
 
     abstract public void Move(int posX, int posY, Rigidbody rb);
 

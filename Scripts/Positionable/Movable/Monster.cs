@@ -6,6 +6,7 @@ public class Monster : MovableObject {
 
     new public void Start() {
         base.StartWithParameter(new DefaultMovementManager(this));
+        this.isBlocking = true;
 
         int x = Random.Range(0, Laby.size);
         int y = Random.Range(0, Laby.size);
@@ -14,8 +15,10 @@ public class Monster : MovableObject {
         transform.Translate(new Vector3(x * Conf.tileSize, 0, y * Conf.tileSize));
     }
 
-    void FixedUpdate() {
-        
+
+    override public bool PrepareMovement(MovementHelper.Direction playerDirection)
+    {
+    
         MovementHelper.Direction direction = MovementHelper.Direction.NONE;
 
         float rand = Random.value;
@@ -23,16 +26,15 @@ public class Monster : MovableObject {
         if (rand < .3)
             direction = MovementHelper.Direction.MOVE_FORWARD;
         else if (rand > .3 && rand < .5)
-            direction = MovementHelper.Direction.TURN_RIGHT;
+            direction = MovementHelper.Direction.STRAFE_RIGHT;
         else if (rand > .5 && rand < .7)
-            direction = MovementHelper.Direction.TURN_LEFT;
+            direction = MovementHelper.Direction.STRAFE_LEFT;
         else if (rand > .7)
             direction = MovementHelper.Direction.MOVE_BACKWARD;
 
-        Debug.Log(posX + " " + posY);
-
         mv.PrepareMovement(posX, posY, direction);
-        mv.Move(posX, posY, rb);
+
+        return false;
 
     }
     

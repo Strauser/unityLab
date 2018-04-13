@@ -15,12 +15,25 @@ public class MovableObject : PositionableObject {
         base.Start();
     }
 
-    public void PrepareMovement(MovementHelper.Direction direction) {
-        mv.PrepareMovement(posX, posY, direction);
+    virtual public bool PrepareMovement(MovementHelper.Direction direction) {
+        return mv.PrepareMovement(posX, posY, direction);
     }
 
     public void Move() {
-        mv.Move(posX, posY, rb);
+        if(mv != null) { 
+            mv.Move(posX, posY, rb);
+        }
+    }
+
+    public void MoveOneTile(MovementHelper.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case (MovementHelper.Orientation.NORTH): posY += 1; break;
+            case (MovementHelper.Orientation.EAST): posX += 1; break;
+            case (MovementHelper.Orientation.WEST): posX -= 1; break;
+            case (MovementHelper.Orientation.SOUTH): posY -= 1; break;
+        }
     }
 
 }

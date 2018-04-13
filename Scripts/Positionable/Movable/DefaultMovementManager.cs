@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultMovementManager : MovementManager {
+public class DefaultMovementManager : MovementManager
+{
 
     public DefaultMovementManager(MovableObject entity) : base(entity) { }
 
     override public void Move(int posX, int posY, Rigidbody rb)
     {
-        
+
         if (framesLeftToMove > 0)
         {
             framesLeftToMove -= 1;
@@ -34,11 +35,12 @@ public class DefaultMovementManager : MovementManager {
         }
     }
 
-    override public void PrepareMovement(int posX, int posY, MovementHelper.Direction direction)
+    override public bool PrepareMovement(int posX, int posY, MovementHelper.Direction direction)
     {
 
-        if(isMoving) {
-            return;
+        if (isMoving)
+        {
+            return false;
         }
 
         bool newMovement = false;
@@ -58,37 +60,40 @@ public class DefaultMovementManager : MovementManager {
             newMovement = true;
             isTranslate = false;
         }
+        else if (direction == MovementHelper.Direction.STRAFE_LEFT && MovementHelper.CanMoveInDirection(posX, posY, MovementHelper.Left(orientation)))
+        {
+            futureMovement = new Vector3(-1, 0.0f, 0);
+            newMovement = true;
+            isTranslate = true;
+
+            entity.MoveOneTile(MovementHelper.Left(orientation));
+        }
+        else if (direction == MovementHelper.Direction.STRAFE_RIGHT && MovementHelper.CanMoveInDirection(posX, posY, MovementHelper.Right(orientation)))
+        {
+            futureMovement = new Vector3(1, 0.0f, 0);
+            newMovement = true;
+            isTranslate = true;
+
+            entity.MoveOneTile(MovementHelper.Right(orientation));
+        }
         else if (direction == MovementHelper.Direction.MOVE_FORWARD && MovementHelper.CanMoveInDirection(posX, posY, orientation))
         {
             futureMovement = new Vector3(0, 0.0f, 1);
             newMovement = true;
             isTranslate = true;
 
-            switch (orientation)
-            {
-                case (MovementHelper.Orientation.NORTH): entity.posY += 1; break;
-                case (MovementHelper.Orientation.EAST): entity.posX += 1; break;
-                case (MovementHelper.Orientation.WEST): entity.posX -= 1; break;
-                case (MovementHelper.Orientation.SOUTH): entity.posY -= 1; break;
-            }
-
+            entity.MoveOneTile(orientation);
         }
         else
         {
-            MovementHelper.Orientation oppositeOrientation = MovementHelper.GetOrientation(entity.transform, 180);
+            MovementHelper.Orientation oppositeOrientation = MovementHelper.Back(MovementHelper.GetOrientation(entity.transform));
             if (direction == MovementHelper.Direction.MOVE_BACKWARD && MovementHelper.CanMoveInDirection(posX, posY, oppositeOrientation))
             {
                 futureMovement = new Vector3(0, 0.0f, -1);
                 newMovement = true;
                 isTranslate = true;
 
-                switch (orientation)
-                {
-                    case (MovementHelper.Orientation.NORTH): entity.posY -= 1; break;
-                    case (MovementHelper.Orientation.EAST): entity.posX -= 1; break;
-                    case (MovementHelper.Orientation.WEST): entity.posX += 1; break;
-                    case (MovementHelper.Orientation.SOUTH): entity.posY += 1; break;
-                }
+                entity.MoveOneTile(MovementHelper.Back(orientation));
             }
         }
 
@@ -100,5 +105,7 @@ public class DefaultMovementManager : MovementManager {
         }
 
         nextMove = futureMovement;
+        return newMovement && isTranslate;
+        
     }
 }

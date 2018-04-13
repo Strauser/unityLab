@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
-
-    bool inAction = false;
+    
     public Player player;
-    List<MovableObject> movableObjects;
+    List<MovableObject> movableObjects = new List<MovableObject>();
     
 
     private void Update() {
@@ -21,14 +20,36 @@ public class InputManager : MonoBehaviour {
             direction = MovementHelper.Direction.TURN_LEFT;
         else if (Input.GetKey(KeyCode.RightArrow))
             direction = MovementHelper.Direction.TURN_RIGHT;
+        else if (Input.GetKey(KeyCode.J))
+            direction = MovementHelper.Direction.STRAFE_LEFT;
+        else if (Input.GetKey(KeyCode.K))
+            direction = MovementHelper.Direction.STRAFE_RIGHT;
 
         if (direction != MovementHelper.Direction.NONE) {
-            player.PrepareMovement(direction);
+            bool playerIsMoving = player.PrepareMovement(direction);
+
+            if(playerIsMoving) { 
+                foreach (MovableObject m in movableObjects) {
+                    m.PrepareMovement(direction);
+                }
+            }
         }
-        
+
+
     }
 
     private void FixedUpdate() {
-        player.Move();
+        if(player.mv != null) { 
+            player.Move();
+        }
+
+        foreach (MovableObject m in movableObjects) {
+            m.Move();
+        }
+    }
+
+    public void AddMonster(MovableObject entity)
+    {
+        movableObjects.Add(entity);
     }
 }
