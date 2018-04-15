@@ -7,6 +7,7 @@ public class Game : MonoBehaviour {
     public Laby laby;
     public Player player;
     public InputManager inputManager;
+    public Canvas canvas;
 
     public Monster monsterType;
 

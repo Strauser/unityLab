@@ -11,7 +11,12 @@ public class InputManager : MonoBehaviour {
     private void Update() {
 
         MovementHelper.Direction direction = MovementHelper.Direction.NONE;
-        
+
+        if (Input.GetKey(KeyCode.X))
+            player.TakeDamage(1);
+        if (Input.GetKey(KeyCode.C))
+            player.Heal(1);
+
         if (Input.GetKey(KeyCode.UpArrow))
             direction = MovementHelper.Direction.MOVE_FORWARD;
         else if (Input.GetKey(KeyCode.DownArrow))

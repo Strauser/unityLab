@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MovableObject {
+public class Monster : LivingEntity {
 
     new public void Start() {
         base.StartWithParameter(new DefaultMovementManager(this));
